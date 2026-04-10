@@ -8,11 +8,16 @@ body {
     font-family: Arial, sans-serif;
 }
 
+/* ── HEADER ── */
 header {
     background-color: #333;
     color: white;
     padding: 10px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
+
 
 .nav-bar {
     max-width: 1200px;
@@ -21,12 +26,53 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
-#logo {
-    font-size: 1.5em;
+.img-nav {
+    width: 100px;
+    height: 100px;
 }
 
+.img-nav img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* ── HAMBURGER ── */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.hamburger span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background: white;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.hamburger.open span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+.hamburger.open span:nth-child(2) {
+    opacity: 0;
+}
+.hamburger.open span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+/* ── NAV ── */
 .nav-links {
     list-style: none;
     display: flex;
@@ -39,26 +85,36 @@ header {
 }
 
 .nav-links > li > a {
-    color: black;
+    color: white;
     text-decoration: none;
     padding: 10px 15px;
     display: inline-block;
 }
 
-.nav-links li a:hover,
+.nav-links > li > a:hover,
 .dropdown-button-nav:hover {
     background-color: #555;
 }
 
+/* ── DROPDOWN BUTTON ── */
 .dropdown-button-nav {
     background: none;
-    color: black;
+    color: white;
     border: none;
     padding: 10px 15px;
     cursor: pointer;
     font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
+.arrow {
+    font-size: 10px;
+    transition: transform 0.25s ease;
+}
+
+/* ── DROPDOWN BOX ── */
 .dropdown-contents {
     position: absolute;
     top: 100%;
@@ -87,11 +143,203 @@ header {
 }
 
 .dropdown-contents a:hover {
-    color: black;
     background-color: #f1f1f1;
 }
 
-.content {
-    padding: 60px;
+/* ── HERO (fixed, covered by scrolling content) ── */
+.hero {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: url("assets/hero.jpg") center/cover no-repeat;
+    z-index: 0;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
+    padding: 20px;
+    color: white;
+}
+
+.hero-overlay h2 {
+    font-size: 3em;
+    margin-bottom: 16px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+
+.hero-overlay p {
+    font-size: 1.2em;
+    max-width: 600px;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+
+/* Spacer so page starts below hero */
+.hero-spacer {
+    height: 100vh;
+    background: transparent;
+}
+
+/* ── HOME SECTION (slides over hero) ── */
+.home-section {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 80px 40px;
+    background-color: #f9f9f9;
+}
+
+.home-section h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.home-section p {
+    max-width: 700px;
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+/* ── FOOTER / CONTACT ── */
+.footer {
+    position: relative;
+    z-index: 1;
+    background-color: #333;
+    color: white;
+    padding: 60px 20px 30px;
+}
+
+.footer-inner {
+    max-width: 1200px;
+    margin: auto;
+    text-align: center;
+}
+
+.footer-inner h2 {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.footer-inner > p {
+    color: #ccc;
+    margin-bottom: 40px;
+}
+
+.footer-columns {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+    text-align: left;
+}
+
+.footer-col h3 {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.footer-col p {
+    color: #ddd;
+    line-height: 1.8;
+}
+
+.footer-copy {
+    color: #777;
+    font-size: 0.85em;
+    border-top: 1px solid #555;
+    padding-top: 20px;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+
+    .hamburger {
+        display: flex;
+    }
+
+    #main-nav {
+        display: none;
+        width: 100%;
+        order: 3;
+    }
+
+    #main-nav.open {
+        display: block;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        align-items: stretch;
+        padding-bottom: 10px;
+    }
+
+    .nav-links li {
+        margin-left: 0;
+    }
+
+    .nav-links > li > a,
+    .dropdown-button-nav {
+        width: 100%;
+        padding: 12px 20px;
+        text-align: left;
+    }
+
+    .dropdown-contents {
+        position: static;
+        box-shadow: none;
+        background-color: #444;
+        transform: none;
+        opacity: 1;
+        visibility: visible;
+        display: none;
+        transition: none;
+    }
+
+    .dropdown-contents.show {
+        display: block;
+    }
+
+    .dropdown-contents a {
+        color: #eee;
+        padding-left: 36px;
+    }
+
+    .dropdown-contents a:hover {
+        background-color: #555;
+    }
+
+    .hero-overlay h2 {
+        font-size: 2em;
+    }
+
+    .hero-overlay p {
+        font-size: 1em;
+    }
+
+    .home-section h1 {
+        font-size: 1.8em;
+    }
+
+    .footer-columns {
+        gap: 30px;
+    }
 }
