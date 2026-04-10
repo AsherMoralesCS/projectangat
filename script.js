@@ -1,19 +1,16 @@
 function toggleDropdown(id) {
     const dropdown = document.getElementById(id);
-    dropdown.classList.toggle("show");
-}
+    const isOpen = dropdown.classList.contains("show");
 
-// Close dropdown when clicking outside
-window.onclick = function(event) {
-    if (!event.target.matches('.dropdown-button-nav')) {
-        const dropdowns = document.getElementsByClassName("dropdown-contents");
+    document.querySelectorAll(".dropdown-contents").forEach(d => d.classList.remove("show"));
 
-        for (let i = 0; i < dropdowns.length; i++) {
-            const openDropdown = dropdowns[i];
-
-            if (openDropdown.classList.contains('show')) {
-                openDropdown.classList.remove('show');
-            }
-        }
+    if (!isOpen) {
+        dropdown.classList.add("show");
     }
 }
+
+window.addEventListener("click", function (event) {
+    if (!event.target.closest(".dropdown")) {
+        document.querySelectorAll(".dropdown-contents").forEach(d => d.classList.remove("show"));
+    }
+});
