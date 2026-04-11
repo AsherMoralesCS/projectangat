@@ -57,108 +57,38 @@ header {
 /* ── MAIN ── */
 .page-content { padding: 50px 20px 80px; background: #f4f4f4; min-height: 60vh; }
 .chart-hint { text-align: center; color: #888; font-size: 0.9em; margin-bottom: 30px; }
+
+/*
+ * chart-wrapper: scrolls horizontally when the SVG is wider than
+ * the viewport, but centres the SVG when it fits.
+ * Key rules:
+ *   - overflow-x: auto  → enables horizontal scroll when needed
+ *   - display: flex + justify-content: center → centres when not scrolling
+ *   - The SVG itself must have an explicit pixel width (set by JS)
+ *     so the flex container knows how wide the child actually is.
+ */
 .chart-wrapper {
     overflow-x: auto;
     overflow-y: visible;
-    padding-bottom: 20px;
+    padding: 10px 0 20px;
     -webkit-overflow-scrolling: touch;
+    /* Centre the SVG when the viewport is wide enough */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
 }
 
+/*
+ * The SVG width + minWidth are both set by JS on every render.
+ * display:block stops the inline baseline gap underneath SVGs.
+ * overflow:visible lets connector lines extend slightly outside
+ * the viewBox without being clipped.
+ */
 #org-chart {
     display: block;
-    min-width: 600px;
     overflow: visible;
+    flex-shrink: 0; /* don't let flexbox squish the SVG below its set width */
 }
-
-/* ── ORG CHART ── */
-.org-chart { display: flex; flex-direction: column; align-items: center; gap: 0; min-width: 600px; }
-
-/* ── LEVEL ROWS ── */
-.level { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; width: 100%; }
-
-/* ── CONNECTOR LINES ── */
-.connector-row { display: flex; justify-content: center; align-items: flex-start; width: 100%; position: relative; height: 30px; }
-
-.connector-row .v-line {
-    width: 2px;
-    height: 30px;
-    background: #aaa;
-}
-
-.connector-row .h-line-wrap {
-    display: flex;
-    align-items: flex-start;
-    position: relative;
-}
-
-.h-bar {
-    height: 2px;
-    background: #aaa;
-    position: absolute;
-    top: 0;
-}
-
-.branch-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* ── BOXES ── */
-.dept-box {
-    background: #333;
-    color: white;
-    border-radius: 8px;
-    padding: 16px 20px;
-    min-width: 200px;
-    max-width: 240px;
-    text-align: center;
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    user-select: none;
-    position: relative;
-}
-
-.dept-box:hover { background: #555; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.2); }
-.dept-box.active { background: #111; box-shadow: 0 6px 16px rgba(0,0,0,0.3); }
-
-.dept-box .box-label { font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.1em; color: #aaa; margin-bottom: 4px; }
-.dept-box .box-title { font-size: 0.95em; font-weight: bold; line-height: 1.4; }
-.dept-box .box-toggle { font-size: 0.75em; color: #aaa; margin-top: 6px; }
-
-.role-box {
-    background: white;
-    color: #222;
-    border: 2px solid #333;
-    border-radius: 8px;
-    padding: 12px 16px;
-    min-width: 170px;
-    max-width: 200px;
-    text-align: center;
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    user-select: none;
-}
-
-.role-box:hover { background: #f0f0f0; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
-.role-box.active { background: #333; color: white; }
-.role-box.active .box-label { color: #aaa; }
-
-.subrole-box {
-    background: #f9f9f9;
-    color: #333;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    padding: 10px 14px;
-    min-width: 150px;
-    max-width: 180px;
-    text-align: center;
-    font-size: 0.88em;
-    cursor: default;
-    transition: box-shadow 0.2s ease;
-}
-
-.subrole-box:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
 
 /* ── FOOTER ── */
 .footer { background-color: #333; color: white; padding: 60px 20px 30px; }
@@ -185,5 +115,4 @@ header {
     .dropdown-contents a.active { background-color: #555; border-left-color: #aaa; }
     .page-banner h1 { font-size: 2em; }
     .footer-columns { gap: 30px; }
-    .dept-box, .role-box, .subrole-box { min-width: 130px; max-width: 160px; font-size: 0.85em; padding: 10px 12px; }
 }
