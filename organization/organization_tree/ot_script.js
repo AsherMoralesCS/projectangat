@@ -1,16 +1,5 @@
 // ─────────────────────────────────────────────────────────────
 //  Org-chart – optimised version
-//  Key changes vs previous attempt:
-//    1. resolveOverlaps() while-loop REMOVED – replaced with a
-//       single-pass analytical spread (O(n), never spins).
-//    2. render() is never called synchronously from a click.
-//       Clicks set state then schedule one RAF; duplicate
-//       clicks in the same frame are collapsed.
-//    3. All DOM writes happen inside a single RAF callback –
-//       the browser gets a full frame to breathe between
-//       interactions.
-//    4. Element pools (lines + groups) reuse nodes; nothing is
-//       ever destroyed and recreated.
 // ─────────────────────────────────────────────────────────────
 
 const D = [
@@ -64,12 +53,12 @@ const RW=155, RH=32, RG=12;
 const t3y_tree = t2y + KH + ROW_GAP - 10;
 
 // List-mode (1 key → roles as indented list, stacked vertically)
-const LKW=160, LKH=34;           // list key box
-const LRW=150, LRH=28, LRG=6;   // list role rows
-const LIST_INDENT=20;            // indent of role rows under key
-const LIST_KEY_GAP=14;           // vertical gap between key groups in same sub
-const LIST_COL_W = LKW + LIST_INDENT + 12;  // total column width per key group
-const LIST_COL_GAP = 20;         // gap between list columns
+const LKW=160, LKH=34;
+const LRW=150, LRH=28, LRG=6;
+const LIST_INDENT=20;
+const LIST_KEY_GAP=14;
+const LIST_COL_W = LKW + LIST_INDENT + 12;
+const LIST_COL_GAP = 20;
 
 // ── state ──────────────────────────────────────────────────────
 const openDepts = new Set();
@@ -90,17 +79,9 @@ function applyAttrs(e, attrs) {
 }
 
 // ── layout mode decision ───────────────────────────────────────
-// "list" mode: exactly 1 key role, any number of sub-roles
-//              OR multiple keys each with their own sub-role list
-//              where keys.length === roles.length (1-to-1)
-// "tree" mode: multiple keys all sharing the same pool of sub-roles
 function subMode(sub) {
-  // If there's only one key, always use list (key as header, roles below)
   if (sub.keys.length === 1) return 'list';
-  // If keys and roles are the same count (or roles < keys), use list
-  // (each key "owns" roughly one role)
   if (sub.roles.length <= sub.keys.length) return 'list';
-  // Multiple keys, more roles than keys → tree (shared role pool below)
   return 'tree';
 }
 
@@ -163,14 +144,8 @@ function computeLayout() {
   }
 
   // ── Tiers 2+3: per-sub, mode-aware ───────────────────────────
-  // Each open sub produces either:
-  //   treeItems[subKey] = { keyBoxes[], roleBoxes[], totalW, subCx }
-  //   listItems[subKey] = { groups[{ keyBox, roleRects[], totalH }], totalW, subCx }
-  // All items are placed relative to the sub's centre; global sweep
-  // pushes them apart at the end.
-
-  const treeItems = new Map();  // subKey → tree layout data
-  const listItems = new Map();  // subKey → list layout data
+  const treeItems = new Map();
+  const listItems = new Map();
 
   for (const sb of subBoxes) {
     const subKey = `${sb.deptId}-${sb.subIdx}`;
@@ -201,20 +176,18 @@ function computeLayout() {
 
     } else {
       // ── List mode ────────────────────────────────────────────
-      // Each key gets its own column; roles are stacked below it.
-      // If keys.length === 1, all roles go under that one key.
-      // If keys.length > 1, distribute roles across keys evenly
-      // (roles.length may be < keys.length, so some keys get 0 roles).
       const { keys, roles } = sb.sub;
       const numCols = keys.length;
 
-      // Distribute roles: if 1 key → all roles under it.
-      // If N keys → assign roles round-robin by index, or group by proximity.
-      // Simple approach: roles[i] → key[i % numCols]
+      // If fewer roles than keys, treat all roles as shared across all keys
       const rolesByKey = Array.from({ length: numCols }, () => []);
-      roles.forEach((r, i) => rolesByKey[i % numCols].push(r));
+      const sharedRoles = [];
+      if (roles.length <= 1 || roles.length < numCols) {
+        roles.forEach(r => sharedRoles.push(r));
+      } else {
+        roles.forEach((r, i) => rolesByKey[i % numCols].push(r));
+      }
 
-      // Compute column heights to find the tallest
       const colH = rolesByKey.map(rs =>
         LKH + (rs.length > 0 ? (LRG + rs.length * (LRH + LRG)) : 0)
       );
@@ -237,15 +210,20 @@ function computeLayout() {
         return { keyBox, roleRects };
       });
 
-      listItems.set(subKey, { groups, totalW, maxColH, subCx,
+      // x=0 placeholder; recomputed in flushRender after sweep+shift
+      const sharedRoleRects = sharedRoles.map((rl, j) => ({
+        x: 0,
+        y: t2y + LKH + LRG + j * (LRH + LRG),
+        w: LRW, h: LRH,
+        label: rl, deptId: sb.deptId, subIdx: sb.subIdx, mode: 'list', shared: true
+      }));
+
+      listItems.set(subKey, { groups, sharedRoleRects, totalW, maxColH, subCx,
         deptId: sb.deptId, subIdx: sb.subIdx, dept: sb.dept });
     }
   }
 
   // ── Global horizontal sweep for tier-2+ clusters ─────────────
-  // Collect all open sub clusters (tree + list) in sub x-order,
-  // push each right if it would overlap the previous.
-  // Build a unified list: { subKey, lx, rx, shift() }
   const tier2Clusters = subBoxes
     .map(sb => {
       const subKey = `${sb.deptId}-${sb.subIdx}`;
@@ -264,7 +242,6 @@ function computeLayout() {
     const needed = prevTierRX + 14;
     if (cl.lx < needed) {
       const delta = needed - cl.lx;
-      // shift all boxes in this cluster
       if (cl.tree) {
         cl.tree.keyBoxes.forEach(b  => b.x += delta);
         cl.tree.roleBoxes.forEach(b => b.x += delta);
@@ -292,11 +269,17 @@ function computeLayout() {
         allKeyBoxes.push(g.keyBox);
         allRoleBoxes.push(...g.roleRects);
       });
+      // sharedRoleRects x is computed at render time; only y matters for height
+      if (list.sharedRoleRects) {
+        list.sharedRoleRects.forEach(r => {
+          if (r.y + r.h > 0) allRoleBoxes.push({ x: 0, y: r.y, w: 0, h: r.h });
+        });
+      }
     }
   }
 
   // Canvas height: deepest element
-  let maxY = t1y + SH;  // at least sub row
+  let maxY = t1y + SH;
   for (const b of allKeyBoxes)  if (b.y + b.h > maxY) maxY = b.y + b.h;
   for (const b of allRoleBoxes) if (b.y + b.h > maxY) maxY = b.y + b.h;
 
@@ -312,7 +295,6 @@ function computeLayout() {
   const finalW     = Math.max(contentW + PAD * 2, minCanvasW, 700);
   const shift      = (finalW - contentW) / 2 - minX;
   for (const b of allBoxes) b.x += shift;
-  // Also shift stored subCx values in clusters (used for connectors)
   for (const { tree, list } of tier2Clusters) {
     if (tree) tree.subCx += shift;
     if (list) list.subCx += shift;
@@ -358,7 +340,7 @@ function releaseUnusedLines() {
 }
 
 // Group pool keyed by stable string id
-const groupPool = new Map(); // id → { g, rect, textNodes: [] }
+const groupPool = new Map();
 
 function acquireGroup(id, onFirstCreate) {
   if (!groupPool.has(id)) {
@@ -380,16 +362,13 @@ function hideStaleGroups(usedIds) {
     if (!usedIds.has(id)) g.setAttribute("display", "none");
 }
 
-// Sync exactly the right number of <text> nodes inside a group
 function syncTexts(entry, defs) {
   const nodes = entry.textNodes;
-  // Grow
   while (nodes.length < defs.length) {
     const t = mkEl("text", { "font-family": "Arial,sans-serif", "text-anchor": "middle" });
     entry.g.appendChild(t);
     nodes.push(t);
   }
-  // Update visible
   defs.forEach((d, i) => {
     const t = nodes[i];
     t.removeAttribute("display");
@@ -399,7 +378,6 @@ function syncTexts(entry, defs) {
     });
     t.textContent = d.s;
   });
-  // Hide extras
   for (let i = defs.length; i < nodes.length; i++)
     nodes[i].setAttribute("display", "none");
 }
@@ -421,7 +399,7 @@ function hBridge(boxes, topY, color) {
 
 // ── scheduled render (RAF-batched) ────────────────────────────
 function scheduleRender() {
-  if (rafId !== null) return;          // already queued – collapse
+  if (rafId !== null) return;
   rafId = requestAnimationFrame(() => {
     rafId = null;
     flushRender();
@@ -507,17 +485,26 @@ function flushRender() {
       // List mode: drop from sub to H-bridge across key columns
       const bridgeY = t2y - 14;
       const keyCxs  = list.groups.map(g => g.keyBox.x + LKW / 2);
+      const keyMid  = (Math.min(...keyCxs) + Math.max(...keyCxs)) / 2;
+
+      // Vertical drop from sub-box bottom
       acquireLine({ x1: sCx, y1: t1y + SH, x2: sCx, y2: bridgeY,
         stroke: color + "99", "stroke-width": "1.5" });
+      // Horizontal jog to key-cluster centre if keys were swept sideways
+      if (Math.abs(keyMid - sCx) > 1)
+        acquireLine({ x1: sCx, y1: bridgeY, x2: keyMid, y2: bridgeY,
+          stroke: color + "99", "stroke-width": "1.5" });
+      // H-bridge across all key columns
       if (keyCxs.length > 1)
         acquireLine({ x1: Math.min(...keyCxs), y1: bridgeY,
-          x2: Math.max(...keyCxs), y2: bridgeY,
+          x2: Math.max(...keyCxs),             y2: bridgeY,
           stroke: color + "99", "stroke-width": "1.5" });
       keyCxs.forEach(cx =>
         acquireLine({ x1: cx, y1: bridgeY, x2: cx, y2: t2y,
           stroke: color + "99", "stroke-width": "1.5" })
       );
-      // Per key column: vertical dashed line + horizontal ticks to each role
+
+      // Per-key column: vertical dashed line + ticks to that key's own roles
       list.groups.forEach(g => {
         if (!g.roleRects.length) return;
         const kCx = g.keyBox.x + LKW / 2;
@@ -530,8 +517,37 @@ function flushRender() {
             stroke: color + "66", "stroke-width": "1.2" });
         });
       });
-    }
-  }
+
+      // Shared roles: recompute x from actual key positions, then draw connectors
+      if (list.sharedRoleRects && list.sharedRoleRects.length) {
+        const minKCx    = Math.min(...keyCxs);
+        const maxKCx    = Math.max(...keyCxs);
+        const midKCx    = (minKCx + maxKCx) / 2;
+        const shBridgeY = t2y + LKH + 8;
+
+        // Fix x now that we know where the keys actually are
+        list.sharedRoleRects.forEach(r => { r.x = midKCx - r.w / 2; });
+
+        // Drop from each key bottom to the shared bridge
+        keyCxs.forEach(cx =>
+          acquireLine({ x1: cx, y1: t2y + LKH, x2: cx, y2: shBridgeY,
+            stroke: color + "66", "stroke-width": "1.2", "stroke-dasharray": "3 3" })
+        );
+        // Horizontal bridge spanning all keys
+        if (keyCxs.length > 1)
+          acquireLine({ x1: minKCx, y1: shBridgeY, x2: maxKCx, y2: shBridgeY,
+            stroke: color + "66", "stroke-width": "1.2", "stroke-dasharray": "3 3" });
+        // Drop from bridge midpoint down to each shared role
+        list.sharedRoleRects.forEach(r => {
+          const rCy = r.y + r.h / 2;
+          acquireLine({ x1: midKCx, y1: shBridgeY, x2: midKCx, y2: rCy,
+            stroke: color + "66", "stroke-width": "1.2", "stroke-dasharray": "3 3" });
+          acquireLine({ x1: midKCx, y1: rCy, x2: r.x + r.w / 2, y2: rCy,
+            stroke: color + "66", "stroke-width": "1.2" });
+        });
+      }
+    }   // closes else (list mode)
+  }     // closes for (const sb of subBoxes)
 
   releaseUnusedLines();
 
@@ -570,7 +586,6 @@ function flushRender() {
         if (openSubs.has(key)) {
           openSubs.delete(key);
         } else {
-          // Close all other depts; keep siblings of this sub open
           openDepts.clear();
           openDepts.add(deptId);
           for (const k of [...openSubs])
@@ -632,12 +647,27 @@ function flushRender() {
         syncTexts(re, [{ x: rx+rw/2, y: ry+rh/2+1, s: rl, sz: "10", w: "400", fill: item.dept.dark }]);
       });
     });
+
+    // Shared role boxes (span all keys in the sub)
+    if (item.sharedRoleRects) {
+      item.sharedRoleRects.forEach(({ x: rx, y: ry, w: rw, h: rh, label: rl,
+                                      deptId: did, subIdx: si }, ri) => {
+        const rid = `role-${did}-${si}-shared-${ri}`;
+        usedIds.add(rid);
+        const re = acquireGroup(rid, g => { g.style.cursor = "default"; });
+        applyAttrs(re.rect, { x: rx, y: ry, width: rw, height: rh, rx: "5",
+          fill: item.dept.light, stroke: item.dept.color,
+          "stroke-width": "1", "stroke-dasharray": "none" });
+        syncTexts(re, [{ x: rx+rw/2, y: ry+rh/2+1, s: rl, sz: "10", w: "400",
+          fill: item.dept.dark }]);
+      });
+    }
   }
 
   hideStaleGroups(usedIds);
 }
 
-// ── nav helpers (unchanged) ────────────────────────────────────
+// ── nav helpers ────────────────────────────────────────────────
 function toggleDropdown(id) {
   const d = document.getElementById(id), isOpen = d.classList.contains("show");
   document.querySelectorAll(".dropdown-contents").forEach(x => x.classList.remove("show"));
