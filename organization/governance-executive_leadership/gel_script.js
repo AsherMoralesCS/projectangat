@@ -4,12 +4,12 @@ const STRUCTURE = [
     label: "Board of\nDirectors",
     tag: "Board of Directors",
     color: "#534AB7", light: "#EEEDFE", dark: "#3C3489",
-    desc: "The Board provides strategic oversight, fiduciary responsibility, and organizational accountability for ANGAT's mission and programs.",
+    desc: "The Board provides strategic oversight, fiduciary responsibility, and organizational accountability for ANGAT's mission and programs.", holder: {name: "Sub-Department", since: "est. 2026"},
     keyRoles: [
-      { id:"chair", label:"Chairperson",       tag:"Board of Directors", color:"#534AB7", light:"#EEEDFE", dark:"#3C3489", desc:"Presides over all Board meetings, ensures the Board fulfills its governance duties, and acts as the primary representative of the organization in formal capacities.", holder:null },
-      { id:"vice",  label:"Vice\nChairperson",  tag:"Board of Directors", color:"#534AB7", light:"#EEEDFE", dark:"#3C3489", desc:"Supports the Chairperson in governance duties, steps in during the Chairperson's absence, and oversees specific Board committees or initiatives as delegated.", holder:null },
-      { id:"sec",   label:"Secretary",          tag:"Board of Directors", color:"#534AB7", light:"#EEEDFE", dark:"#3C3489", desc:"Maintains official records of all Board proceedings, manages correspondence, ensures compliance with documentation requirements, and safeguards organizational documents.", holder:null },
-      { id:"treas", label:"Treasurer",          tag:"Board of Directors", color:"#534AB7", light:"#EEEDFE", dark:"#3C3489", desc:"Oversees financial integrity of the organization, reports on financial standing to the Board, and ensures proper accounting and stewardship of organizational funds.", holder:null }
+      { id:"chair", label:"Chairperson",       tag:"Board of Directors", color:"#534AB7", light:"#EEEDFE", dark:"#3C3489", desc:"The Chairperson provides overall leadership to the governing body and ensures that all decisions and policies are aligned with the organization’s mission, vision, and objectives. This role is responsible for providing strategic direction and maintaining organizational coherence.", holder: { name: "Asher Morales", since: "2026" }},
+      { id:"vice",  label:"Vice\nChairperson",  tag:"Board of Directors", color:"#534AB7", light:"#EEEDFE", dark:"#3C3489", desc:"The Vice Chairperson supports the Chairperson in the execution of leadership responsibilities and ensures continuity of governance. This role assists in decision-making and contributes to organizational stability and effectiveness.", holder:null },
+      { id:"sec",   label:"Secretary",          tag:"Board of Directors", color:"#534AB7", light:"#EEEDFE", dark:"#3C3489", desc:"The Secretary is responsible for maintaining official records, documentation, and correspondence of the organization. This role ensures proper communication, accurate record-keeping, and administrative organization.", holder: { name: "Acel Lea Ardeño", since: "2026" } },
+      { id:"treas", label:"Treasurer",          tag:"Board of Directors", color:"#534AB7", light:"#EEEDFE", dark:"#3C3489", desc:"The Treasurer is responsible for the management, monitoring, and reporting of the organization’s financial resources. This role ensures financial accountability, transparency, and proper allocation of funds.", holder: { name: "Marvie Lance Domingo", since: "2026" } }
     ],
     subRoles: [
       { id:"bm", label:"Board\nMembers", tag:"Board of Directors", color:"#534AB7", light:"#EEEDFE", dark:"#3C3489", desc:"Participate in Board deliberations and decision-making, provide diverse expertise and perspectives, and collectively uphold the organization's mission, values, and strategic direction.", holder:null }
@@ -20,10 +20,10 @@ const STRUCTURE = [
     label: "Executive\nLeadership",
     tag: "Executive Leadership",
     color: "#3C3489", light: "#E8E6F8", dark: "#26215C",
-    desc: "The Executive team leads day-to-day operations, implements Board decisions, and drives ANGAT's programs and partnerships forward.",
+    desc: "The Executive team leads day-to-day operations, implements Board decisions, and drives ANGAT's programs and partnerships forward.", holder: {name: "Sub-Department", since: "est. 2026"},
     keyRoles: [
-      { id:"ed",  label:"Executive\nDirector",      tag:"Executive Leadership", color:"#3C3489", light:"#E8E6F8", dark:"#26215C", desc:"Leads the organization's overall operations and strategy, acts as the primary liaison between the Board and staff, and is responsible for fulfilling ANGAT's mission through programs, partnerships, and resource mobilization.", holder:null },
-      { id:"ded", label:"Deputy\nExec. Director",   tag:"Executive Leadership", color:"#3C3489", light:"#E8E6F8", dark:"#26215C", desc:"Assists the Executive Director in organizational management, assumes executive responsibilities in the Director's absence, and directly oversees internal operations and cross-departmental coordination.", holder:null }
+      { id:"ed",  label:"Executive\nDirector",      tag:"Executive Leadership", color:"#3C3489", light:"#E8E6F8", dark:"#26215C", desc:"The Executive Director provides overall operational leadership and oversees the implementation of organizational strategies, programs, and initiatives. This role ensures that all departments function in alignment with the organization’s goals.", holder: { name: "Kath Leah Talbos", since: "2026"} },
+      { id:"ded", label:"Deputy\nExec. Director",   tag:"Executive Leadership", color:"#3C3489", light:"#E8E6F8", dark:"#26215C", desc:"The Deputy Executive Director assists the Executive Director in overseeing daily operations and supports the implementation of organizational plans and policies. This role ensures continuity and operational efficiency.", holder:null }
     ],
     subRoles: [
       { id:"ea", label:"Executive\nAssistant", tag:"Executive Leadership", color:"#3C3489", light:"#E8E6F8", dark:"#26215C", desc:"Provides high-level administrative and logistical support to the Executive Director and Deputy, manages scheduling and communications, and ensures smooth day-to-day executive operations.", holder:null }

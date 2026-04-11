@@ -6,14 +6,14 @@ const STRUCTURE = [
     color: "#0F6E56",
     light: "#E1F5EE",
     dark:  "#085041",
-    desc: "Oversees the day-to-day operational functions of ANGAT, ensuring that administrative processes, human resources, logistics, and volunteer systems run smoothly and efficiently.",
+    desc: "Oversees the day-to-day operational functions of ANGAT, ensuring that administrative processes, human resources, logistics, and volunteer systems run smoothly and efficiently.", holder: {name: "Sub-Department", since: "est. 2026"},
     keyRoles: [
       {
         id: "ops_dir",
         label: "Operations\nDirector",
         tag: "Operations Department",
         color: "#0F6E56", light: "#E1F5EE", dark: "#085041",
-        desc: "Leads and oversees all operational activities of ANGAT, ensures organizational systems are functioning effectively, and coordinates cross-departmental operations to support program delivery and administrative efficiency.",
+        desc: "The Operations Director oversees internal processes and ensures the efficient execution of organizational activities. This role focuses on maintaining smooth operations and supporting program implementation.",
         holder: null
       }
     ],
@@ -59,14 +59,14 @@ const STRUCTURE = [
     color: "#085041",
     light: "#C8EDE3",
     dark:  "#04342C",
-    desc: "Ensures the financial integrity, transparency, and sustainability of ANGAT through sound financial management, budgeting, accounting, and compliance.",
+    desc: "Ensures the financial integrity, transparency, and sustainability of ANGAT through sound financial management, budgeting, accounting, and compliance.", holder: {name: "Sub-Department", since: "est. 2026"},
     keyRoles: [
       {
         id: "fin_dir",
         label: "Finance\nDirector",
         tag: "Finance & Administration Department",
         color: "#085041", light: "#C8EDE3", dark: "#04342C",
-        desc: "Leads the financial planning, management, and reporting of ANGAT, ensures fiscal responsibility, and provides strategic financial guidance to the Executive Leadership and Board.",
+        desc: "The Finance Director oversees financial planning, management, and reporting. This role ensures proper financial control, resource allocation, and fiscal responsibility across the organization.",
         holder: null
       }
     ],

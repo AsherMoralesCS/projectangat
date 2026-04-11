@@ -14,14 +14,14 @@ const STRUCTURE = [
     color: "#185FA5",
     light: "#E6F1FB",
     dark:  "#0C447C",
-    desc: "Tracks the effectiveness and impact of ANGAT's programs through systematic data collection, field research, and evidence-based evaluation to drive learning and continuous improvement.",
+    desc: "Tracks the effectiveness and impact of ANGAT's programs through systematic data collection, field research, and evidence-based evaluation to drive learning and continuous improvement.", holder: {name: "Sub-Department", since: "est. 2026"},
     keyRoles: [
       {
         id: "me_dir",
         label: "M&E\nDirector",
         tag: "Monitoring, Evaluation & Research",
         color: "#185FA5", light: "#E6F1FB", dark: "#0C447C",
-        desc: "Leads the design and implementation of ANGAT's monitoring and evaluation framework, oversees research initiatives, ensures data quality, and translates findings into actionable recommendations for program improvement.",
+        desc: "The Monitoring and Evaluation Director develops and implements systems for assessing program performance, outcomes, and impact. This role ensures continuous improvement through data-driven evaluation and reporting.",
         holder: null
       }
     ],
@@ -66,17 +66,17 @@ const STRUCTURE = [
     id: "legal",
     label: "Legal &\nCompliance",
     tag: "Legal & Compliance",
-    color: "#1050880",
+    color: "#105088",
     light: "#D8EAF8",
     dark:  "#083660",
-    desc: "Safeguards ANGAT's legal standing and regulatory compliance, providing expert guidance on organisational governance, contracts, policy, and risk management.",
+    desc: "Safeguards ANGAT's legal standing and regulatory compliance, providing expert guidance on organisational governance, contracts, policy, and risk management.", holder: {name: "Sub-Department", since: "est. 2026"},
     keyRoles: [
       {
         id: "legal_off",
         label: "Legal\nOfficer",
         tag: "Legal & Compliance",
         color: "#104880", light: "#D8EAF8", dark: "#083660",
-        desc: "Manages all legal matters for ANGAT including contracts, regulatory filings, governance documentation, and compliance with applicable Philippine laws and donor legal requirements.",
+        desc: "The Legal Officer ensures organizational compliance with applicable laws, regulations, and policies. This role manages legal documentation and supports risk mitigation and ethical governance.",
         holder: null
       }
     ],
@@ -100,14 +100,14 @@ const STRUCTURE = [
     color: "#1368B0",
     light: "#DCF0FF",
     dark:  "#0A4A80",
-    desc: "Maintains and develops the digital infrastructure that enables ANGAT's operations, program delivery, and data management through reliable systems, databases, and technical support.",
+    desc: "Maintains and develops the digital infrastructure that enables ANGAT's operations, program delivery, and data management through reliable systems, databases, and technical support.", holder: {name: "Sub-Department", since: "est. 2026"},
     keyRoles: [
       {
         id: "it_off",
         label: "IT\nOfficer",
         tag: "IT & Digital Systems",
         color: "#1368B0", light: "#DCF0FF", dark: "#0A4A80",
-        desc: "Oversees ANGAT's technology systems, hardware, software, and network infrastructure; provides technical support to staff; and ensures digital security, data backups, and system reliability.",
+        desc: "The IT Officer manages the organization’s digital infrastructure, including hardware, software, and network systems. This role ensures the reliability, security, and efficiency of technological operations and provides technical support as needed.",
         holder: null
       }
     ],

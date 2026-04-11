@@ -14,15 +14,15 @@ const STRUCTURE = [
     color: "#993C1D",
     light: "#FAECE7",
     dark:  "#712B13",
-    desc: "Designs, implements, and monitors community-based programs covering livelihood, education, and health services to directly uplift the communities ANGAT serves.",
+    desc: "Designs, implements, and monitors community-based programs covering livelihood, education, and health services to directly uplift the communities ANGAT serves.", holder: {name: "Sub-Department", since: "est. 2026"},
     keyRoles: [
       {
         id: "pgm_dir",
         label: "Programs\nDirector",
         tag: "Programs & Community",
         color: "#993C1D", light: "#FAECE7", dark: "#712B13",
-        desc: "Provides strategic leadership for all community programs, oversees program planning, implementation, monitoring, and evaluation, and ensures alignment with ANGAT's mission and donor commitments.",
-        holder: null
+        desc: "The Programs Director is responsible for the planning, development, and implementation of organizational programs. This role ensures that initiatives are effectively designed to meet community and organizational objectives.",
+        holder: {name: "Adrienne Alexey Aguirre", since: "2026"}
       }
     ],
     subRoles: [
@@ -69,15 +69,15 @@ const STRUCTURE = [
     color: "#7A2E12",
     light: "#F5E4DE",
     dark:  "#551F0C",
-    desc: "Shapes ANGAT's public presence, amplifies its mission through strategic communications, digital media, and advocacy campaigns that mobilise supporters and influence policy.",
+    desc: "Shapes ANGAT's public presence, amplifies its mission through strategic communications, digital media, and advocacy campaigns that mobilise supporters and influence policy.", holder: {name: "Sub-Department", since: "est. 2026"},
     keyRoles: [
       {
         id: "comms_dir",
         label: "Communications\nDirector",
         tag: "Communications & Advocacy",
         color: "#7A2E12", light: "#F5E4DE", dark: "#551F0C",
-        desc: "Leads the communications and advocacy strategy, oversees all public-facing content, manages media relations, and ensures ANGAT's messaging is consistent, compelling, and impact-driven.",
-        holder: null
+        desc: "The Communications Director manages internal and external communication strategies, including public relations and information dissemination. This role ensures clear, consistent, and effective communication across all stakeholders.",
+        holder: {name: "Byron Leonard Alar", since: "2026"}
       }
     ],
     subRoles: [
@@ -124,15 +124,15 @@ const STRUCTURE = [
     color: "#5C2310",
     light: "#EFD9D2",
     dark:  "#3D160A",
-    desc: "Secures the financial and institutional resources ANGAT needs to sustain and scale its programs through fundraising, grant writing, sponsorships, and corporate partnerships.",
+    desc: "Secures the financial and institutional resources ANGAT needs to sustain and scale its programs through fundraising, grant writing, sponsorships, and corporate partnerships.", holder: {name: "Sub-Department", since: "est. 2026"},
     keyRoles: [
       {
         id: "partner_dir",
         label: "Partnerships\nDirector",
         tag: "Partnerships & Resources",
         color: "#5C2310", light: "#EFD9D2", dark: "#3D160A",
-        desc: "Leads resource mobilisation strategy, cultivates relationships with funders and corporate partners, oversees grant management, and ensures financial sustainability of ANGAT's programs.",
-        holder: null
+        desc: "The Partnerships Director is responsible for establishing and maintaining relationships with external partners, stakeholders, and donors. This role focuses on resource mobilization and strengthening institutional collaborations.",
+        holder: {name: "Lyca Joyce Amido", since: "2026"}
       }
     ],
     subRoles: [
