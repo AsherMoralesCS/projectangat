@@ -10,7 +10,10 @@ body {
 
 /* ── HEADER ── */
 header {
-    background-color: #333;
+    background: url("../../assets/navbar-top-img.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
     color: white;
     padding: 10px 0;
     position: sticky;
@@ -156,33 +159,43 @@ header {
 
 /* ── PAGE BANNER ── */
 .page-banner {
-    background-color: #444;
+    background: linear-gradient(135deg, #3E1F0D 0%, #8B5E34 60%, #D9A066 100%);
     color: white;
-    padding: 60px 20px;
+    padding: 70px 20px 40px;
     text-align: center;
+    position: relative;
+    overflow: hidden;
 }
-
-.page-banner-inner {
-    max-width: 800px;
-    margin: auto;
+.page-banner::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+        45deg, transparent, transparent 40px,
+        rgba(255,255,255,0.03) 40px, rgba(255,255,255,0.03) 41px
+    );
 }
-
+.page-banner-inner { max-width: 800px; margin: auto; position: relative; z-index: 1; }
 .page-banner-label {
-    font-size: 0.85em;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: #aaa;
-    margin-bottom: 10px;
+    font-size: 0.8em; text-transform: uppercase;
+    letter-spacing: 0.2em; color: rgba(255,255,255,0.6);
+    margin-bottom: 12px; font-weight: 300;
 }
-
 .page-banner h1 {
-    font-size: 2.8em;
-    margin-bottom: 14px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.2em; font-weight: 700;
+    margin-bottom: 16px; line-height: 1.15;
 }
-
 .page-banner-sub {
-    font-size: 1.1em;
-    color: #ccc;
+    font-size: 1.05em; color: rgba(255,255,255,0.75);
+    font-weight: 300; max-width: 560px;
+    margin: 0 auto; line-height: 1.7;
+}
+.chart-hint {
+    margin-top: 20px;
+    font-size: 0.82em;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.04em;
+    font-weight: 300;
 }
 
 /* ── MAIN CONTENT ── */

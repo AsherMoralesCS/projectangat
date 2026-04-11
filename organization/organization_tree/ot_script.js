@@ -1,5 +1,7 @@
 // ─────────────────────────────────────────────────────────────
-//  Org-chart – optimised version
+//  Org-chart – all-open variant
+//  All dept and sub boxes can be expanded simultaneously.
+//  No auto-close behaviour on click.
 // ─────────────────────────────────────────────────────────────
 
 const D = [
@@ -47,12 +49,12 @@ const t0y = PAD;
 const t1y = t0y + BH + ROW_GAP;
 const t2y = t1y + SH + ROW_GAP;
 
-// Tree-mode (N keys → shared roles below)
+// Tree-mode
 const KW=155, KH=34, KG=12;
 const RW=155, RH=32, RG=12;
 const t3y_tree = t2y + KH + ROW_GAP - 10;
 
-// List-mode (1 key → roles as indented list, stacked vertically)
+// List-mode
 const LKW=160, LKH=34;
 const LRW=150, LRH=28, LRG=6;
 const LIST_INDENT=20;
@@ -88,11 +90,12 @@ function subMode(sub) {
 // ── layout (pure computation, zero DOM) ───────────────────────
 function computeLayout() {
   const INTER_SUB_GAP = 14;
+  const INTER_DEPT_GAP = 40; // extra breathing room between dept columns
 
-  // ── Tier 0: dept boxes at nominal positions ──────────────────
+  // ── Tier 0: dept boxes — positions derived after sub layout ──
   const deptMeta = D.map((d, i) => ({ d, nomCx: i * (BW + BG) + BW / 2 }));
 
-  // ── Tier 1: sub-box clusters ─────────────────────────────────
+  // ── Tier 1: sub-box clusters (ALL open depts) ────────────────
   const clusterFor = new Map();
   for (const { d, nomCx } of deptMeta) {
     if (!openDepts.has(d.id)) continue;
@@ -105,7 +108,7 @@ function computeLayout() {
     clusterFor.set(d.id, { boxes });
   }
 
-  // Global sweep: push sub clusters apart
+  // Global sweep: push sub clusters apart so nothing overlaps
   const openDeptsSorted = [...openDepts].sort((a, b) => a - b);
   let prevRX = -Infinity;
   for (const did of openDeptsSorted) {
@@ -154,7 +157,6 @@ function computeLayout() {
     const mode  = subMode(sb.sub);
 
     if (mode === 'tree') {
-      // ── Tree mode ────────────────────────────────────────────
       const { keys, roles } = sb.sub;
       const kTotalW = keys.length  * KW + (keys.length  - 1) * KG;
       const rTotalW = roles.length * RW + (roles.length - 1) * RG;
@@ -163,7 +165,7 @@ function computeLayout() {
       const kStartX = subCx - kTotalW / 2;
       const rStartX = subCx - rTotalW / 2;
 
-      const keyBoxes  = keys.map((label, i)  => ({
+      const keyBoxes  = keys.map((label, i) => ({
         x: kStartX + i * (KW + KG), y: t2y, w: KW, h: KH,
         label, deptId: sb.deptId, subIdx: sb.subIdx, dept: sb.dept, mode: 'tree'
       }));
@@ -175,11 +177,9 @@ function computeLayout() {
         deptId: sb.deptId, subIdx: sb.subIdx, dept: sb.dept });
 
     } else {
-      // ── List mode ────────────────────────────────────────────
       const { keys, roles } = sb.sub;
       const numCols = keys.length;
 
-      // If fewer roles than keys, treat all roles as shared across all keys
       const rolesByKey = Array.from({ length: numCols }, () => []);
       const sharedRoles = [];
       if (roles.length <= 1 || roles.length < numCols) {
@@ -197,7 +197,7 @@ function computeLayout() {
       const startX  = subCx - totalW / 2;
 
       const groups = keys.map((label, i) => {
-        const colX  = startX + i * (LIST_COL_W + LIST_COL_GAP);
+        const colX   = startX + i * (LIST_COL_W + LIST_COL_GAP);
         const keyBox = {
           x: colX, y: t2y, w: LKW, h: LKH,
           label, deptId: sb.deptId, subIdx: sb.subIdx, dept: sb.dept, mode: 'list'
@@ -230,16 +230,22 @@ function computeLayout() {
       const tree = treeItems.get(subKey);
       const list = listItems.get(subKey);
       if (!tree && !list) return null;
-      const subCx = sb.x + SW / 2;
+      const subCx  = sb.x + SW / 2;
       const totalW = tree ? tree.totalW : list.totalW;
-      return { subKey, lx: subCx - totalW / 2, rx: subCx + totalW / 2, tree, list };
+      return { subKey, lx: subCx - totalW / 2, rx: subCx + totalW / 2, tree, list,
+               deptId: sb.deptId };
     })
     .filter(Boolean)
     .sort((a, b) => a.lx - b.lx);
 
-  let prevTierRX = -Infinity;
+  let prevTierRX  = -Infinity;
+  let prevTierDept = null;
   for (const cl of tier2Clusters) {
-    const needed = prevTierRX + 14;
+    // Use a larger gap when crossing dept boundaries to prevent visual merging
+    const gap = (prevTierDept !== null && prevTierDept !== cl.deptId)
+      ? INTER_DEPT_GAP
+      : 14;
+    const needed = prevTierRX + gap;
     if (cl.lx < needed) {
       const delta = needed - cl.lx;
       if (cl.tree) {
@@ -256,7 +262,8 @@ function computeLayout() {
       }
       cl.lx += delta; cl.rx += delta;
     }
-    prevTierRX = cl.rx;
+    prevTierRX   = cl.rx;
+    prevTierDept = cl.deptId;
   }
 
   // ── Flatten for rendering + find canvas bounds ────────────────
@@ -269,7 +276,6 @@ function computeLayout() {
         allKeyBoxes.push(g.keyBox);
         allRoleBoxes.push(...g.roleRects);
       });
-      // sharedRoleRects x is computed at render time; only y matters for height
       if (list.sharedRoleRects) {
         list.sharedRoleRects.forEach(r => {
           if (r.y + r.h > 0) allRoleBoxes.push({ x: 0, y: r.y, w: 0, h: r.h });
@@ -278,7 +284,7 @@ function computeLayout() {
     }
   }
 
-  // Canvas height: deepest element
+  // Canvas height
   let maxY = t1y + SH;
   for (const b of allKeyBoxes)  if (b.y + b.h > maxY) maxY = b.y + b.h;
   for (const b of allRoleBoxes) if (b.y + b.h > maxY) maxY = b.y + b.h;
@@ -315,7 +321,6 @@ const boxLayer  = mkEl("g", {});
 svg.appendChild(connLayer);
 svg.appendChild(boxLayer);
 
-// Line pool
 const lines = [];
 let   lineHead = 0;
 
@@ -339,7 +344,6 @@ function releaseUnusedLines() {
   lineHead = 0;
 }
 
-// Group pool keyed by stable string id
 const groupPool = new Map();
 
 function acquireGroup(id, onFirstCreate) {
@@ -397,7 +401,7 @@ function hBridge(boxes, topY, color) {
     acquireLine({ x1: Math.min(...midXs), y1: topY, x2: Math.max(...midXs), y2: topY, stroke: color, "stroke-width": "1.5" });
 }
 
-// ── scheduled render (RAF-batched) ────────────────────────────
+// ── scheduled render ──────────────────────────────────────────
 function scheduleRender() {
   if (rafId !== null) return;
   rafId = requestAnimationFrame(() => {
@@ -425,7 +429,7 @@ function flushRender() {
       stroke: "#bbb", "stroke-width": "1.5", "stroke-dasharray": "4 3" });
   }
 
-  // Index subs by dept for connector drawing
+  // Index subs by dept
   const subsByDept = new Map();
   for (const sb of subBoxes) {
     if (!subsByDept.has(sb.deptId)) subsByDept.set(sb.deptId, []);
@@ -456,23 +460,21 @@ function flushRender() {
         stroke: "#bbb", "stroke-width": "1.5", "stroke-dasharray": "4 3" });
   }
 
-  // Sub → tier-2 connectors, mode-aware per sub
+  // Sub → tier-2 connectors
   for (const sb of subBoxes) {
     const subKey = `${sb.deptId}-${sb.subIdx}`;
     const tree = treeItems.get(subKey);
     const list = listItems.get(subKey);
     if (!tree && !list) continue;
 
-    const sCx  = sb.x + SW / 2;
+    const sCx   = sb.x + SW / 2;
     const color = sb.dept.color;
 
     if (tree) {
-      // Drop from sub to H-bridge, then down to each key
       const bridgeY = t2y - 14;
       acquireLine({ x1: sCx, y1: t1y + SH, x2: sCx, y2: bridgeY,
         stroke: color + "99", "stroke-width": "1.5" });
       hBridge(tree.keyBoxes, bridgeY, color + "99");
-      // Keys → roles: midpoint of key row down to role H-bridge
       if (tree.roleBoxes.length) {
         const xs   = tree.keyBoxes.map(k => k.x + KW / 2);
         const kMid = (Math.min(...xs) + Math.max(...xs)) / 2;
@@ -482,19 +484,15 @@ function flushRender() {
         hBridge(tree.roleBoxes, rBridgeY, color + "66");
       }
     } else {
-      // List mode: drop from sub to H-bridge across key columns
       const bridgeY = t2y - 14;
       const keyCxs  = list.groups.map(g => g.keyBox.x + LKW / 2);
       const keyMid  = (Math.min(...keyCxs) + Math.max(...keyCxs)) / 2;
 
-      // Vertical drop from sub-box bottom
       acquireLine({ x1: sCx, y1: t1y + SH, x2: sCx, y2: bridgeY,
         stroke: color + "99", "stroke-width": "1.5" });
-      // Horizontal jog to key-cluster centre if keys were swept sideways
       if (Math.abs(keyMid - sCx) > 1)
         acquireLine({ x1: sCx, y1: bridgeY, x2: keyMid, y2: bridgeY,
           stroke: color + "99", "stroke-width": "1.5" });
-      // H-bridge across all key columns
       if (keyCxs.length > 1)
         acquireLine({ x1: Math.min(...keyCxs), y1: bridgeY,
           x2: Math.max(...keyCxs),             y2: bridgeY,
@@ -504,7 +502,6 @@ function flushRender() {
           stroke: color + "99", "stroke-width": "1.5" })
       );
 
-      // Per-key column: vertical dashed line + ticks to that key's own roles
       list.groups.forEach(g => {
         if (!g.roleRects.length) return;
         const kCx = g.keyBox.x + LKW / 2;
@@ -518,26 +515,21 @@ function flushRender() {
         });
       });
 
-      // Shared roles: recompute x from actual key positions, then draw connectors
       if (list.sharedRoleRects && list.sharedRoleRects.length) {
         const minKCx    = Math.min(...keyCxs);
         const maxKCx    = Math.max(...keyCxs);
         const midKCx    = (minKCx + maxKCx) / 2;
         const shBridgeY = t2y + LKH + 8;
 
-        // Fix x now that we know where the keys actually are
         list.sharedRoleRects.forEach(r => { r.x = midKCx - r.w / 2; });
 
-        // Drop from each key bottom to the shared bridge
         keyCxs.forEach(cx =>
           acquireLine({ x1: cx, y1: t2y + LKH, x2: cx, y2: shBridgeY,
             stroke: color + "66", "stroke-width": "1.2", "stroke-dasharray": "3 3" })
         );
-        // Horizontal bridge spanning all keys
         if (keyCxs.length > 1)
           acquireLine({ x1: minKCx, y1: shBridgeY, x2: maxKCx, y2: shBridgeY,
             stroke: color + "66", "stroke-width": "1.2", "stroke-dasharray": "3 3" });
-        // Drop from bridge midpoint down to each shared role
         list.sharedRoleRects.forEach(r => {
           const rCy = r.y + r.h / 2;
           acquireLine({ x1: midKCx, y1: shBridgeY, x2: midKCx, y2: rCy,
@@ -561,7 +553,13 @@ function flushRender() {
     const entry = acquireGroup(id, g => {
       g.style.cursor = "pointer";
       g.addEventListener("click", () => {
-        openDepts.has(d.id) ? openDepts.delete(d.id) : openDepts.add(d.id);
+        // Toggle dept; if closing, also close all its subs
+        if (openDepts.has(d.id)) {
+          openDepts.delete(d.id);
+          d.subs.forEach((_, i) => openSubs.delete(`${d.id}-${i}`));
+        } else {
+          openDepts.add(d.id);
+        }
         scheduleRender();
       });
     });
@@ -583,13 +581,10 @@ function flushRender() {
     const entry = acquireGroup(id, g => {
       g.style.cursor = "pointer";
       g.addEventListener("click", () => {
+        // Simple toggle — no forced closing of other subs or depts
         if (openSubs.has(key)) {
           openSubs.delete(key);
         } else {
-          openDepts.clear();
-          openDepts.add(deptId);
-          for (const k of [...openSubs])
-            if (!k.startsWith(deptId + '-')) openSubs.delete(k);
           openSubs.add(key);
         }
         scheduleRender();
@@ -602,7 +597,7 @@ function flushRender() {
       ...multilineDefs(x + w / 2, y + h / 2 - 4, sub.name.split("\n"), "11", "500",
         isOpen ? "#fff" : dept.dark),
       { x: x + w / 2, y: y + h - 8, s: isOpen ? "▲" : "▼", sz: "9", w: "400",
-        fill: isOpen ? "rgba(255,255,255,0.6)" : dept.color + "aa" }
+        fill: isOpen ? "a(255,255,255,0.6)" : dept.color + "aa" }
     ]);
   }
 
@@ -648,7 +643,7 @@ function flushRender() {
       });
     });
 
-    // Shared role boxes (span all keys in the sub)
+    // Shared role boxes
     if (item.sharedRoleRects) {
       item.sharedRoleRects.forEach(({ x: rx, y: ry, w: rw, h: rh, label: rl,
                                       deptId: did, subIdx: si }, ri) => {

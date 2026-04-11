@@ -13,8 +13,7 @@ header {
     background: url("assets/navbar-top-img.jpg");
     background-repeat: no-repeat;
     background-position: center;
-    border-bottom-right-radius: 100%;
-    border-bottom-left-radius: 100%;
+    background-size: cover;
     color: white;
     padding: 10px 0;
     position: sticky;
