@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research, Monitoring &amp; Support Services – ANGAT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="rmss_style.css">
+</head>
+<body>
+
+<header>
+    <div class="nav-bar">
+        <div class="img-nav">
+            <a href="../../index.html#hero-home">
+                <img src="../../assets/logo.jpg" alt="ANGAT Logo">
+            </a>
+        </div>
+
+        <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <nav id="main-nav">
+            <ul class="nav-links">
+                <li><a href="../../index.html#hero-home" onclick="closeMobileMenu()">Home</a></li>
+
+                <li class="dropdown">
+                    <button class="dropdown-button-nav" onclick="toggleDropdown('about-us-dropdown')">
+                        About Us <span class="arrow">&#9660;</span>
+                    </button>
+                    <div id="about-us-dropdown" class="dropdown-contents">
+                        <a href="../../about_us/mission-vision-objectives/mvo_index.html">Mission, Vision &amp; Objectives</a>
+                        <a href="../../about_us/doctrines-teachings-core_values/dtcv_index.html">Doctrines, Teachings &amp; Core Values</a>
+                        <a href="../../about_us/history/history_index.html">History</a>
+                        <a href="../../about_us/founding_members/founding_members_index.html">Founding Members</a>
+                    </div>
+                </li>
+
+                <li class="dropdown">
+                    <button class="dropdown-button-nav" onclick="toggleDropdown('organization-dropdown')">
+                        Organization <span class="arrow">&#9660;</span>
+                    </button>
+                    <div id="organization-dropdown" class="dropdown-contents">
+                        <a href="../organization_tree/ot_index.html">Organizational Structure</a>
+                        <a href="../governance-executive_leadership/gel_index.html">Governance &amp; Executive Leadership</a>
+                        <a href="../operations-administrations/oa_index.html">Operations &amp; Administration</a>
+                        <a href="../programs-external_engagement/pee_index.html">Programs &amp; External Engagement</a>
+                        <a href="rmss_index.html" class="active">Research, Monitoring &amp; Support Services</a>
+                    </div>
+                </li>
+
+                <li><a href="#contact" onclick="closeMobileMenu()">Contact Us</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<!-- PAGE BANNER -->
+<div class="page-banner">
+    <div class="page-banner-inner">
+        <p class="page-banner-label">Organization</p>
+        <h1>Research, Monitoring &amp; Support Services</h1>
+        <p class="page-banner-sub">Strengthening ANGAT's evidence base, legal integrity, and digital infrastructure through rigorous research, compliance oversight, and reliable technology systems.</p>
+        <p class="chart-hint">Hover over a role to preview it. Click to see the full description.</p>
+    </div>
+</div>
+
+<main class="page-content">
+    <div class="chart-wrapper">
+        <svg id="rmss-chart" style="display:block;overflow:visible;"></svg>
+    </div>
+
+    <!-- Detail panel -->
+    <div id="detail-panel" class="detail-panel" aria-hidden="true">
+        <div class="detail-panel-stripe"></div>
+        <button class="detail-close" id="detail-close" aria-label="Close panel">&#10005;</button>
+        <div class="detail-panel-body">
+            <div class="detail-tag"         id="detail-tag"></div>
+            <h2 class="detail-title"        id="detail-title"></h2>
+            <div class="detail-divider"></div>
+            <p class="detail-desc"          id="detail-desc"></p>
+            <div class="detail-divider"></div>
+            <div class="detail-holder-wrap" id="detail-holder-wrap"></div>
+        </div>
+    </div>
+    <div id="panel-overlay" class="panel-overlay"></div>
+</main>
+
+<div id="rmss-tooltip" class="rmss-tooltip" role="tooltip" aria-hidden="true"></div>
+
+<footer id="contact" class="footer">
+    <div class="footer-inner">
+        <h2>Contact Us</h2>
+        <p>We'd love to hear from you. Reach out to us through any of the channels below.</p>
+        <div class="footer-columns">
+            <div class="footer-col">
+                <h3>Address</h3>
+                <p>District 1<br>Sibalom 5317 Antique<br>Philippines</p>
+            </div>
+            <div class="footer-col">
+                <h3>Email</h3>
+                <p>projectangat@gmail.com<br>angatsupport@gmail.com</p>
+            </div>
+            <div class="footer-col">
+                <h3>Phone</h3>
+                <p>+1 (555) 555-0067<br>+1 (555) 555-0069</p>
+            </div>
+        </div>
+        <p class="footer-copy">&copy; 2026 ANGAT. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="rmss_script.js"></script>
+</body>
+</html>

@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Programs & External Engagement – ANGAT</title>
-
+    <title>Programs &amp; External Engagement – ANGAT</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="pee_style.css">
 </head>
 <body>
@@ -22,7 +20,9 @@
         </div>
 
         <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Toggle menu">
-            <span></span><span></span><span></span>
+            <span></span>
+            <span></span>
+            <span></span>
         </button>
 
         <nav id="main-nav">
@@ -60,14 +60,13 @@
     </div>
 </header>
 
+<!-- PAGE BANNER -->
 <div class="page-banner">
     <div class="page-banner-inner">
         <p class="page-banner-label">Organization</p>
         <h1>Programs &amp; External Engagement</h1>
-        <p class="page-banner-sub">
-            The driving force behind ANGAT’s impact — delivering programs, building partnerships, and engaging communities for sustainable change.
-        </p>
-        <p class="chart-hint">Click any department box to expand its roles.</p>
+        <p class="page-banner-sub">Driving community impact through livelihood, education, health programs, advocacy campaigns, and strategic partnerships that amplify ANGAT's mission.</p>
+        <p class="chart-hint">Hover over a role to preview it. Click to see the full description.</p>
     </div>
 </div>
 
@@ -75,13 +74,29 @@
     <div class="chart-wrapper">
         <svg id="pee-chart" style="display:block;overflow:visible;"></svg>
     </div>
+
+    <!-- Detail panel -->
+    <div id="detail-panel" class="detail-panel" aria-hidden="true">
+        <div class="detail-panel-stripe"></div>
+        <button class="detail-close" id="detail-close" aria-label="Close panel">&#10005;</button>
+        <div class="detail-panel-body">
+            <div class="detail-tag" id="detail-tag"></div>
+            <h2 class="detail-title" id="detail-title"></h2>
+            <div class="detail-divider"></div>
+            <p class="detail-desc" id="detail-desc"></p>
+            <div class="detail-divider"></div>
+            <div class="detail-holder-wrap"   id="detail-holder-wrap"></div>
+        </div>
+    </div>
+    <div id="panel-overlay" class="panel-overlay"></div>
 </main>
+
+<div id="pee-tooltip" class="pee-tooltip" role="tooltip" aria-hidden="true"></div>
 
 <footer id="contact" class="footer">
     <div class="footer-inner">
         <h2>Contact Us</h2>
-        <p>We'd love to hear from you.</p>
-
+        <p>We'd love to hear from you. Reach out to us through any of the channels below.</p>
         <div class="footer-columns">
             <div class="footer-col">
                 <h3>Address</h3>
@@ -96,7 +111,6 @@
                 <p>+1 (555) 555-0067<br>+1 (555) 555-0069</p>
             </div>
         </div>
-
         <p class="footer-copy">&copy; 2026 ANGAT. All rights reserved.</p>
     </div>
 </footer>
