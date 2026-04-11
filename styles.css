@@ -10,14 +10,17 @@ body {
 
 /* ── HEADER ── */
 header {
-    background-color: #333;
+    background: url("assets/navbar-top-img.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    border-bottom-right-radius: 100%;
+    border-bottom-left-radius: 100%;
     color: white;
     padding: 10px 0;
     position: sticky;
     top: 0;
     z-index: 1000;
 }
-
 
 .nav-bar {
     max-width: 1200px;
