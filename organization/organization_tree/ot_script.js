@@ -25,7 +25,7 @@ const D = [
     id: 2, short: "Programs &\nEngagement", color: "#993C1D",
     light: "#FAECE7", dark: "#712B13",
     subs: [
-      { name: "Programs &\nCommunity",      keys: ["Programs Director"],      roles: ["Livelihood Program Coordinator","Education Program Coordinator","Health & Social Services Coordinator","Field Officers"] },
+      { name: "Programs &\nCommunity",      keys: ["Programs Director"],      roles: ["Livelihood Program Coordinator","Education Program Coordinator","Health & Social Services Coord.","Field Officers"] },
       { name: "Communications\n& Advocacy", keys: ["Communications Director"], roles: ["Social Media Manager","Content Writer / Graphic Designer","Public Relations Officer","Advocacy Campaign Officer"] },
       { name: "Partnerships &\nResources",  keys: ["Partnerships Director"],   roles: ["Fundraising Officer","Sponsorship Coordinator","Grant Writer","Corporate Partnerships Officer"] }
     ]

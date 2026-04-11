@@ -128,17 +128,26 @@ header {
 
 /* ── CHART WRAPPER ── */
 .chart-wrapper {
+    width: 100%;
+    max-width: 100vw;
+
     overflow-x: auto;
     overflow-y: visible;
+
     padding: 20px 0 30px;
+
     -webkit-overflow-scrolling: touch;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    transition: transform 0.38s cubic-bezier(.4,0,.2,1),
-                filter   0.38s cubic-bezier(.4,0,.2,1);
-    transform-origin: left center;
+
+    display: block; /* IMPORTANT FIX */
+    position: relative;
 }
+
+/* ensures SVG doesn't force page-wide overflow */
+.chart-wrapper svg {
+    display: block;
+    max-width: none;
+}
+
 .chart-wrapper.panel-open {
     transform: translateX(-60px);
 }

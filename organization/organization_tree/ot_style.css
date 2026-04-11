@@ -105,14 +105,24 @@ header {
  *     so the flex container knows how wide the child actually is.
  */
 .chart-wrapper {
+    width: 100%;
+    max-width: 100vw;
+
     overflow-x: auto;
     overflow-y: visible;
-    padding: 10px 0 20px;
+
+    padding: 20px 0 30px;
+
     -webkit-overflow-scrolling: touch;
-    /* Centre the SVG when the viewport is wide enough */
+
+    position: relative;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
+}
+
+.chart-wrapper svg {
+    margin: 0 auto;
+    display: block;
+    max-width: none;
 }
 
 /*
