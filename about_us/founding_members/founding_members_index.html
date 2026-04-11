@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Founding Members – ANGAT</title>
+    <link rel="stylesheet" href="founding_members_style.css">
+</head>
+<body>
+
+<header>
+    <div class="nav-bar">
+        <div class="img-nav">
+            <a href="../../index.html">
+                <img src="../../assets/logo.jpg" alt="ANGAT Logo">
+            </a>
+        </div>
+
+        <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <nav id="main-nav">
+            <ul class="nav-links">
+                <li><a href="../../index.html#home" onclick="closeMobileMenu()">Home</a></li>
+
+                <li class="dropdown">
+                    <button class="dropdown-button-nav"
+                        onclick="toggleDropdown('about-us-dropdown')">
+                        About Us <span class="arrow">&#9660;</span>
+                    </button>
+                    <div id="about-us-dropdown" class="dropdown-contents">
+                        <a href="../mission-vision-objectives/mvo_index.html">Mission, Vision &amp; Objectives</a>
+                        <a href="../doctrines-teachings-core_values/dtcv_index.html">Doctrines, Teachings &amp; Core Values</a>
+                        <a href="../history/history_index.html">History</a>
+                        <a href="founding_members_index.html" class="active">Founding Members</a>
+                    </div>
+                </li>
+
+                <li class="dropdown">
+                    <button class="dropdown-button-nav"
+                        onclick="toggleDropdown('organization-dropdown')">
+                        Organization <span class="arrow">&#9660;</span>
+                    </button>
+                    <div id="organization-dropdown" class="dropdown-contents">
+                        <a href="../../organization/governance/governance_index.html">Governance &amp; Executive Leadership</a>
+                        <a href="../../organization/operations/operations_index.html">Operations &amp; Administration</a>
+                        <a href="../../organization/programs/programs_index.html">Programs &amp; External Engagement</a>
+                        <a href="../../organization/research/research_index.html">Research, Monitoring &amp; Support Services</a>
+                    </div>
+                </li>
+
+                <li><a href="#contact" onclick="closeMobileMenu()">Contact Us</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<!-- PAGE BANNER -->
+<div class="page-banner">
+    <div class="page-banner-inner">
+        <p class="page-banner-label">About Us</p>
+        <h1>Founding Members</h1>
+        <p class="page-banner-sub">The individuals who laid the foundation of this organization.</p>
+    </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main class="page-content">
+
+    <section class="members-intro">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </section>
+
+    <section class="members-grid">
+
+        <div class="member-card">
+            <div class="member-avatar">AM</div>
+            <div class="member-info">
+                <h3>Asher Morales</h3>
+                <span class="member-role">Chairperson</span>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.</p>
+            </div>
+        </div>
+
+        <div class="member-card">
+            <div class="member-avatar">ALA</div>
+            <div class="member-info">
+                <h3>Acel Lea Ardeño</h3>
+                <span class="member-role">Secretary General</span>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.</p>
+            </div>
+        </div>
+
+        <div class="member-card">
+            <div class="member-avatar">MLD</div>
+            <div class="member-info">
+                <h3>Marvie Lance Domingo</h3>
+                <span class="member-role">Treasurer</span>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.</p>
+            </div>
+        </div>
+
+        <div class="member-card">
+            <div class="member-avatar">AAA</div>
+            <div class="member-info">
+                <h3>Adrienne Alexey Aguirre</h3>
+                <span class="member-role">Program Director</span>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.</p>
+            </div>
+        </div>
+
+        <div class="member-card">
+            <div class="member-avatar">BLA</div>
+            <div class="member-info">
+                <h3>Byron Leonard Alar</h3>
+                <span class="member-role">Communications Officer</span>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.</p>
+            </div>
+        </div>
+
+        <div class="member-card">
+            <div class="member-avatar">KLT</div>
+            <div class="member-info">
+                <h3>Kath Leah Talbos</h3>
+                <span class="member-role">Community Liaison</span>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.</p>
+            </div>
+        </div>
+
+        <div class="member-card">
+            <div class="member-avatar">LJA</div>
+            <div class="member-info">
+                <h3>Lyca Joyce Amido</h3>
+                <span class="member-role">Community Liaison</span>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.</p>
+            </div>
+        </div>
+
+    </section>
+
+</main>
+
+<!-- FOOTER / CONTACT -->
+<footer id="contact" class="footer">
+    <div class="footer-inner">
+        <h2>Contact Us</h2>
+        <p>We'd love to hear from you. Reach out to us through any of the channels below.</p>
+        <div class="footer-columns">
+            <div class="footer-col">
+                <h3>Address</h3>
+                <p>District 1<br>Sibalom 5317 Antique<br>Philippines</p>
+            </div>
+            <div class="footer-col">
+                <h3>Email</h3>
+                <p>projectangat@gmail.com<br>angatsupport@gmail.com</p>
+            </div>
+            <div class="footer-col">
+                <h3>Phone</h3>
+                <p>+1 (555) 555-0067<br>+1 (555) 555-0069</p>
+            </div>
+        </div>
+        <p class="footer-copy">&copy; 2026 ANGAT. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="founding_members_script.js"></script>
+</body>
+</html>
