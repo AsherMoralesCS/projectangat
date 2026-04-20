@@ -14,7 +14,7 @@ const STRUCTURE = [
         tag: "Operations Department",
         color: "#0F6E56", light: "#E1F5EE", dark: "#085041",
         desc: "The Operations Director oversees internal processes and ensures the efficient execution of organizational activities. This role focuses on maintaining smooth operations and supporting program implementation.",
-        holder: null
+        holder: { name: "John Paul Alejandro", since: "2026" }
       }
     ],
     subRoles: [
